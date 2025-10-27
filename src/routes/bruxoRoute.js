@@ -11,5 +11,7 @@ router.get("/:id", BruxoController.listarUm)
 router.post("/", BruxoController.criar)
 //Rota delete
 router.delete("/:id", BruxoController.apagar)
+//Rota update
+router.put("/:id", BruxoController.atualizar)
 
 export default router;
