@@ -55,3 +55,46 @@ export const listarUm = async (req, res) => {
         })
     }
 }
+
+export const criar = async (req, res) => {
+    try {
+        // De onde vem os dados para cá? Para eu usar para criar
+        const { nome, casa, patrono, varinha, anoMatricula } = req.body
+
+        const dado = req.body
+
+        // Validacao campos obrigatorios
+        const camposObrigatorios = ['nome', 'casa', 'varinha', 'anoMatricula'];
+
+        const faltando = camposObrigatorios.filter(campo => !dado[campo]);
+
+        if (faltando.length > 0) {
+            return res.status(400).json({
+                erro: `Os seguintes campos são obrigatórios: ${faltando.join(', ')}.`
+            });
+        }
+
+        // Verificar se a casa é valida
+        const casasValidas = ['Grifinória', 'Sonserina', 'Corvinal', 'Lufa-Lufa'];
+        if (!casasValidas.includes(casa)) {
+            return res.status(400).json({
+                erro: 'Casa inválida!',
+                casasValidas
+            })
+        }
+
+        const novoBruxo = await BruxoModel.create(dado);
+
+        res.status(201).json({
+            mensagem: 'Bruxo criado com sucesso!',
+            bruxo: novoBruxo
+        })
+
+
+    } catch (error) {
+        res.status(500).json({
+            erro: 'Erro ao criar bruxo',
+            detalhes: error.message
+        })
+    }
+}
